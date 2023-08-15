@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "instagram-disclosure-trends"
+version = "0.1.0"
+description = "Experiments for the paper Influencer Self-Disclosure Practices on Instagram: A Multi-Country Longitudinal Study"
+authors = ["thalesbertaglia <contact@thalesbertaglia.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "instagram_disclosure_trends"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^2.0.3"
+plotly = "^5.16.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
