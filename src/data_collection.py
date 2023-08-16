@@ -1,4 +1,3 @@
-import os
 import time
 import json
 import logging
@@ -7,17 +6,9 @@ from typing import Optional
 from pathlib import Path
 from datetime import datetime, timedelta
 from tenacity import retry, stop_after_attempt, wait_fixed, after_log, RetryError
-from dotenv import load_dotenv
 
-if not load_dotenv():
-    raise ValueError("Failed to load environment variables from .env file")
 
-# Constants
-API_TOKEN = os.getenv("API_TOKEN")
-if not API_TOKEN:
-    raise ValueError("API_TOKEN not found in environment variables")
-
-BASE_URL = f"https://api.crowdtangle.com/posts?token={API_TOKEN}"
+BASE_URL = f"https://api.crowdtangle.com/posts?token="
 SLEEP_DURATION_IN_SEC = 12
 RETRY_LIMIT = 10
 LOG_FORMAT = "%(asctime)s — %(levelname)s — %(message)s"
@@ -26,8 +17,6 @@ LOG_PATH = DATA_PATH / "logs"
 DATA_PATH.mkdir(parents=True, exist_ok=True)
 LOG_PATH.mkdir(exist_ok=True)
 HTTP_SUCCESS = 200
-START_YEAR = 2023
-END_YEAR = 2022
 DEFAULT_FILE_NAME = "log.txt"
 PROGRESS_FILE = DATA_PATH / "progress.txt"
 
@@ -47,8 +36,8 @@ logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
 
-def construct_url(base_url: str, params: dict) -> str:
-    return f"{base_url}&{'&'.join(f'{key}={value}' for key, value in params.items())}"
+def construct_url(base_url: str, api_token: str, params: dict) -> str:
+    return f"{base_url}{api_token}&{'&'.join(f'{key}={value}' for key, value in params.items())}"
 
 
 def store_response(response: dict, account: str, target_year: int, page: int) -> None:
@@ -125,7 +114,9 @@ def retrieve_posts(
         return None
 
 
-def fetch_posts_for_accounts(accounts: list[tuple[str, str, str]]) -> None:
+def fetch_posts_for_accounts(
+    accounts: list[tuple[str, str, str]], api_token: str
+) -> None:
     for account_name, start_date, end_date in accounts:
         for start_date_i, end_date_i in iterate_year_ranges(start_date, end_date):
             target_year = datetime.strptime(start_date_i, "%Y-%m-%d").year
@@ -137,7 +128,7 @@ def fetch_posts_for_accounts(accounts: list[tuple[str, str, str]]) -> None:
                 "sortBy": "date",
                 "count": "100",
             }
-            url = construct_url(BASE_URL, params)
+            url = construct_url(BASE_URL, api_token, params)
             page_counter = 1
             try:
                 response = retrieve_posts(url, account_name, target_year, page_counter)
