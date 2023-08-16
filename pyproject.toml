@@ -11,8 +11,16 @@ packages = [{include = "instagram_disclosure_trends"}]
 python = "^3.9"
 pandas = "^2.0.3"
 plotly = "^5.16.0"
+python-dotenv = "^1.0.0"
+ipykernel = "^6.25.1"
+tenacity = "^8.2.3"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[virtualenvs]
+create = true
+in-project = true
