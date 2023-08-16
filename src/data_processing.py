@@ -7,7 +7,6 @@ from typing import List, Dict, Any, Tuple
 from .utils import safe_get
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants

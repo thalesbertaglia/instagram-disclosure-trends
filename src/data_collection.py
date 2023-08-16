@@ -51,7 +51,7 @@ def store_response(response: dict, account: str, target_year: int, page: int) ->
 def record_error(
     account: str, target_year: int, error_msg: str, file_name: str = DEFAULT_FILE_NAME
 ) -> None:
-    with (LOG_PATH / file_name).open("a") as file:
+    with (LOG_PATH / file_name).open("w") as file:
         file.write(f"{account}\t{target_year}\t{error_msg}\n")
 
 
@@ -145,11 +145,3 @@ def fetch_posts_for_accounts(
                 logger.error(
                     f"Failed to fetch data for {account_name}: {target_year} after {RETRY_LIMIT} attempts."
                 )
-
-
-if __name__ == "__main__":
-    accounts = [
-        ("kyliejenner", "2020-08-05", "2023-09-22"),
-        ("kimkardashian", "2018-08-05", "2023-09-22"),
-    ]
-    fetch_posts_for_accounts(accounts)
