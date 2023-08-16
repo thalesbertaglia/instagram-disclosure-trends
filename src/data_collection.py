@@ -80,7 +80,7 @@ def retrieve_posts(
     url: str, account: str, target_year: int, page_number: int
 ) -> Optional[dict]:
     logger.info(
-        f"Retrieving posts for {account} in the year {target_year}... Page {page_number}"
+        f"Retrieving posts for {account} from {target_year}... Page {page_number}"
     )
     try:
         response = requests.get(url).json()
