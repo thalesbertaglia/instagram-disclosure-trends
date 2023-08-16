@@ -138,7 +138,7 @@ def process_files_in_directory(directory_path: Path) -> Tuple[List[Dict], List[D
     return post_data, acc_data
 
 
-def process_crowdtangle_data_directory():
+def process_crowdtangle_data_directory() -> Tuple[pd.DataFrame, pd.DataFrame]:
     base_path = Path("./data/crowdtangle_data/")
     post_data, acc_data = [], []
 
