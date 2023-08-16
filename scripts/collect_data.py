@@ -1,6 +1,7 @@
 import os
 import argparse
 import logging
+from typing import Dict, List, Tuple
 
 import pandas as pd
 from dotenv import load_dotenv
@@ -12,7 +13,7 @@ from src.data_processing import (
 )
 
 
-def load_env():
+def load_env() -> str:
     if not load_dotenv():
         logging.error(
             "Failed to load environment variables from .env file. Ensure the file exists."
@@ -29,16 +30,28 @@ def load_env():
     return API_TOKEN
 
 
-def get_account_tuples(metadata):
-    """Extract account tuples from metadata DataFrame."""
+def get_account_metadata(metadata: pd.DataFrame) -> Dict[str, dict]:
+    return {
+        row["username"]: {
+            key: row[key] for key in metadata.columns if key != "username"
+        }
+        for _, row in metadata.iterrows()
+    }
+
+
+def get_account_tuples(
+    metadata_dict: Dict[str, dict]
+) -> Tuple[List[Tuple[str, str, str]], List[Tuple[str, str, str]]]:
     tuples = []
     tuples_full_date = []
 
-    for _, row in metadata.iterrows():
-        first_date = row["first_post"].split()[0]
-        last_date = row["last_post"].split()[0]
-        tuples.append((row["username"], first_date, last_date))
-        tuples_full_date.append((row["username"], row["first_post"], row["last_post"]))
+    for username, user_data in metadata_dict.items():
+        first_date = user_data["first_post"].split()[0]
+        last_date = user_data["last_post"].split()[0]
+        tuples.append((username, first_date, last_date))
+        tuples_full_date.append(
+            (username, user_data["first_post"], user_data["last_post"])
+        )
 
     return tuples, tuples_full_date
 
