@@ -149,3 +149,14 @@ def process_crowdtangle_data_directory() -> Tuple[pd.DataFrame, pd.DataFrame]:
             acc_data.extend(a_data)
 
     return pd.DataFrame(post_data), pd.DataFrame(acc_data)
+
+
+def filter_processed_posts(
+    df_posts: pd.DataFrame, accounts: list[tuple[str, str, str]]
+) -> pd.DataFrame:
+    filtered_posts = [
+        df_posts.query(f"username == @username and @first_post <= date <= @last_post")
+        for username, first_post, last_post in accounts
+    ]
+
+    return pd.concat(filtered_posts)
