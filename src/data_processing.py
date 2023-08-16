@@ -4,7 +4,7 @@ import re
 import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
-from utils import safe_get
+from .utils import safe_get
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
