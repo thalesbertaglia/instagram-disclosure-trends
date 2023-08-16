@@ -79,7 +79,6 @@ def iterate_year_ranges(start_date, end_date):
 def retrieve_posts(
     url: str, account: str, target_year: int, page_number: int
 ) -> Optional[dict]:
-    print(url)
     logger.info(
         f"Retrieving posts for {account} in the year {target_year}... Page {page_number}"
     )
