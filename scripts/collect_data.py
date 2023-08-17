@@ -10,6 +10,7 @@ from src.data_collection import fetch_posts_for_accounts
 from src.data_processing import (
     process_crowdtangle_data_directory,
     filter_processed_posts,
+    augment_processed_posts,
 )
 
 
@@ -88,15 +89,19 @@ def main():
     # Load API key
     API_TOKEN = load_env()
     # Load dataset metadata
-    dataset_metadata = pd.read_csv(args.csv_path)
+    dataset_metadata = get_account_metadata(pd.read_csv(args.csv_path))
     account_tuples, account_tuples_full_date = get_account_tuples(dataset_metadata)
     # Data collection
     if not args.skip_collection:
         fetch_posts_for_accounts(account_tuples, API_TOKEN)
     # Data processing
     if not args.skip_create_df:
+        # First processing step, raw jsons to df
         df_posts, df_profiles = process_crowdtangle_data_directory()
+        # Ensuring the date ranges are correct
         df_posts = filter_processed_posts(df_posts, account_tuples_full_date)
+        # Adding the processed columns, used for the experiments
+        df_posts = augment_processed_posts(df_posts, dataset_metadata)
         df_posts.to_pickle(args.post_df_path)
         df_profiles.to_pickle(args.profile_df_path)
 
