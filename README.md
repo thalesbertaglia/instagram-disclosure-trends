@@ -43,7 +43,7 @@ achrafhakimi,DE,mega,612,10162234,2014-01-19 19:49:42,2022-09-16 12:39:47
 
 1. Clone the repository:
     ```bash
-    git clone YOUR_REPO_LINK_HERE
+    git clone https://github.com/thalesbertaglia/instagram-disclosure-trends
     cd instagram-disclosure-trends
     ```
 
