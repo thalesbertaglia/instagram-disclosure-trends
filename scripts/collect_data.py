@@ -76,6 +76,11 @@ def main():
         help="Skip processing the raw CrowdTangle data into a DataFrame",
     )
     parser.add_argument(
+        "--skip_augmentation",
+        action="store_true",
+        help="Skip augmenting the DataFrame with additional columns. Use this option for collecting data from new accounts, not included in the original dataset.",
+    )
+    parser.add_argument(
         "--post_df_path",
         default="data/df_posts.pkl",
         help="Path to the processed posts df pickle file",
@@ -101,7 +106,8 @@ def main():
         # Ensuring the date ranges are correct
         df_posts = filter_processed_posts(df_posts, account_tuples_full_date)
         # Adding the processed columns, used for the experiments
-        df_posts = augment_processed_posts(df_posts, dataset_metadata)
+        if not args.skip_augmentation:
+            df_posts = augment_processed_posts(df_posts, dataset_metadata)
         df_posts.to_pickle(args.post_df_path)
         df_profiles.to_pickle(args.profile_df_path)
 
