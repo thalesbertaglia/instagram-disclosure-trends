@@ -165,7 +165,7 @@ def augment_processed_posts(
     df_posts: pd.DataFrame, metadata_dict: Dict[str, dict]
 ) -> pd.DataFrame:
     # Mapping the columns from the metadata_dict
-    keys_to_map = ["country", "size", "followers"]
+    keys_to_map = ["country", "size", "followers_collection_time"]
     for key_name in keys_to_map:
         values_to_map = {
             username: data[key_name]
