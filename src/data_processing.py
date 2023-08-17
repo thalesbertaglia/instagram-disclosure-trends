@@ -159,3 +159,22 @@ def filter_processed_posts(
     ]
 
     return pd.concat(filtered_posts)
+
+
+def augment_processed_posts(
+    df_posts: pd.DataFrame, metadata_dict: Dict[str, dict]
+) -> pd.DataFrame:
+    # Mapping the columns from the metadata_dict
+    keys_to_map = ["country", "size", "followers"]
+    for key_name in keys_to_map:
+        values_to_map = {
+            username: data[key_name]
+            for username, data in metadata_dict.items()
+            if key_name in data
+        }
+        df_posts[key_name] = df_posts["username"].map(values_to_map)
+
+    # Additional columns
+    df_posts["dt_year_mon"] = df_posts["date"].str[:7].str.replace("-", "/")
+
+    return df_posts
