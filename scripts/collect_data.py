@@ -1,3 +1,4 @@
+import sys
 import os
 import argparse
 import logging
@@ -19,14 +20,14 @@ def load_env() -> str:
         logging.error(
             "Failed to load environment variables from .env file. Ensure the file exists."
         )
-        exit(1)
+        sys.exit(1)
 
     API_TOKEN = os.getenv("API_TOKEN")
     if not API_TOKEN:
         logging.error(
             "API_TOKEN not found in environment variables. Ensure it's set in the .env file."
         )
-        exit(1)
+        sys.exit(1)
 
     return API_TOKEN
 
