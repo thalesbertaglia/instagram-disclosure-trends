@@ -1,6 +1,9 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
+import pandas as pd
+import plotly.express as px
 import pyperclip
+from plotly import graph_objects as go
 
 
 def safe_get(dictionary: Dict[str, Any], *keys, default=None) -> Any:
@@ -16,7 +19,7 @@ def safe_get(dictionary: Dict[str, Any], *keys, default=None) -> Any:
 
 
 def generate_latex_table(
-    df_table: "pd.DataFrame",
+    df_table: pd.DataFrame,
     table_caption: str,
     table_label: str,
     columns_rename_map: Dict[str, str] = {},
@@ -37,3 +40,25 @@ def generate_latex_table(
             position_float="centering",
         )
     )
+
+
+def display_formatted(df: pd.DataFrame, precision: int = 0):
+    format = "{:,.%df}" % precision
+    with pd.option_context("display.float_format", format.format):
+        display(df)
+
+
+def plot_agg_timeseries(
+    df_posts: pd.DataFrame, by: str, time_column: str = "dt_year_mon"
+) -> go.Figure:
+    dt_agg = (
+        df_posts.groupby(["country", time_column])[by]
+        .mean()
+        .unstack()
+        .fillna(0)
+        .stack()
+        .reset_index()
+        .rename({time_column: "date", 0: by}, axis=1)
+    )
+    fig = px.line(dt_agg, x="date", y=by, color="country")
+    return fig
